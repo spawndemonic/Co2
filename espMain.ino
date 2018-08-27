@@ -33,8 +33,8 @@
 #include <ESP8266WebServer.h>
 #include <ESP8266mDNS.h>
 
-const char *ssid = "YourSSIDHere";
-const char *password = "YourPSKHere";
+const char *ssid = "FiOS-4EOZP";
+const char *password = "hat5385plan0075art";
 //set webserver to prot 80
 ESP8266WebServer server(80);
 //set pin for the led
@@ -90,8 +90,7 @@ void handleNotFound() {
 }
 
 void setup(void) {
-  pinMode(led, OUTPUT);
-  digitalWrite(led, 0);
+ 
   Serial.begin(115200);
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);

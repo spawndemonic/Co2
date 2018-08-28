@@ -33,8 +33,8 @@
 #include <ESP8266WebServer.h>
 #include <ESP8266mDNS.h>
 
-const char *ssid = "FiOS-4EOZP";
-const char *password = "hat5385plan0075art";
+const char *ssid = "ssid";
+const char *password = "passphrase";
 //set webserver to prot 80
 ESP8266WebServer server(80);
 //set pin for the led
@@ -54,13 +54,12 @@ void handleRoot() {
     <meta http-equiv='refresh' content='5'/>\
     <title>ESP8266 Demo</title>\
     <style>\
-      body { background-color: #cccccc; font-family: Arial, Helvetica, Sans-Serif; Color: #000088; }\
+      body {  font-family: Arial, Helvetica, Sans-Serif; Color: #000088; }\
     </style>\
   </head>\
   <body>\
-    <h1>Hello from ESP8266!</h1>\
+    <h1>Sensor test</h1>\
     <p>Uptime: %02d:%02d:%02d</p>\
-    <img src=\"/test.svg\" />\
   </body>\
 </html>",
 

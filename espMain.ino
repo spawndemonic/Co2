@@ -9,7 +9,7 @@
 // Import required libraries
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
-#include "aREST\\aREST.h"
+#include "Server\\aREST.h"
 
 // Clients
 WiFiClient espClient;

@@ -23,8 +23,8 @@ const char* password = "your_wifi_network_password";
 WiFiServer server(LISTEN_PORT);
 
 // Variables to be exposed to the API
-int temperature;
-int humidity;
+int currentPPM;
+int averagePPM;
 
 // Declare functions to be exposed to the API
 int ledControl(String command);
@@ -35,14 +35,13 @@ void setup(void)
   Serial.begin(115200);
 
   // Init variables and expose them to REST API
-  temperature = 24;
-  humidity = 40;
-  rest.variable("temperature",&temperature);
-  rest.variable("humidity",&humidity);
+  
+  //rest.variable("temperature",&temperature);
+  //rest.variable("humidity",&humidity);
 
   // Function to be exposed
-  rest.function("led",ledControl);
-
+  //rest.function("key",function);
+  
   // Give name & ID to the device (ID should be 6 characters long)
   rest.set_id("1");
   rest.set_name("esp8266");

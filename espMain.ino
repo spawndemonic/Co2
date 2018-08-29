@@ -1,6 +1,5 @@
 /*
   This a simple example of the aREST Library for the ESP8266 WiFi chip.
-  This example illustrate the cloud part of aREST that makes the board accessible from anywhere
   See the README file for more details.
 
   Written in 2015 by Marco Schwartz under a GPL license.
@@ -8,37 +7,32 @@
 
 // Import required libraries
 #include <ESP8266WiFi.h>
-#include <PubSubClient.h>
-#include "Server\\aREST.h"
-
-// Clients
-WiFiClient espClient;
-PubSubClient client(espClient);
+#include <aREST.h>
 
 // Create aREST instance
-aREST rest = aREST(client);
-
-// Unique ID to identify the device for cloud.arest.io
-char* device_id = "esp826612e";
+aREST rest = aREST();
 
 // WiFi parameters
-const char* ssid = "";
-const char* password = "";
+const char* ssid = "your_wifi_network_name";
+const char* password = "your_wifi_network_password";
+
+// The port to listen for incoming TCP connections
+#define LISTEN_PORT           80
+
+// Create an instance of the server
+WiFiServer server(LISTEN_PORT);
 
 // Variables to be exposed to the API
 int temperature;
 int humidity;
 
-// Functions
-void callback(char* topic, byte* payload, unsigned int length);
+// Declare functions to be exposed to the API
+int ledControl(String command);
 
 void setup(void)
 {
   // Start Serial
   Serial.begin(115200);
-
-  // Set callback
-  client.setCallback(callback);
 
   // Init variables and expose them to REST API
   temperature = 24;
@@ -46,8 +40,11 @@ void setup(void)
   rest.variable("temperature",&temperature);
   rest.variable("humidity",&humidity);
 
+  // Function to be exposed
+  rest.function("led",ledControl);
+
   // Give name & ID to the device (ID should be 6 characters long)
-  rest.set_id(device_id);
+  rest.set_id("1");
   rest.set_name("esp8266");
 
   // Connect to WiFi
@@ -59,21 +56,34 @@ void setup(void)
   Serial.println("");
   Serial.println("WiFi connected");
 
-  // Set output topic
-  char* out_topic = rest.get_topic();
+  // Start the server
+  server.begin();
+  Serial.println("Server started");
 
+  // Print the IP address
+  Serial.println(WiFi.localIP());
 }
 
 void loop() {
 
-  // Connect to the cloud
+  // Handle REST calls
+  WiFiClient client = server.available();
+  if (!client) {
+    return;
+  }
+  while(!client.available()){
+    delay(1);
+  }
   rest.handle(client);
 
 }
 
-// Handles message arrived on subscribed topic(s)
-void callback(char* topic, byte* payload, unsigned int length) {
+// Custom function accessible by the API
+int ledControl(String command) {
 
-  rest.handle_callback(client, topic, payload, length);
+  // Get state from command
+  int state = command.toInt();
 
+  digitalWrite(6,state);
+  return 1;
 }
